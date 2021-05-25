@@ -1,0 +1,1 @@
+# collection-of-small-django-rest-api-projects
