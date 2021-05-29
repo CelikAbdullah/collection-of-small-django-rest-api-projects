@@ -75,6 +75,7 @@ WSGI_APPLICATION = 'authenticationrestapi.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'EXCEPTION_HANDLER': 'users.utils.custom_exception_handler'
 }
 
 '''
