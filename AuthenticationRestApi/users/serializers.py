@@ -56,7 +56,12 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
 
-        raise serializers.ValidationError({"response": "Error", "error_message": "Invalid credentials."})
+        if validate_username(data["username"]) is None:
+            raise serializers.ValidationError({"response": "Error", "error_message": "Check your username. It might "
+                                                                                     "be wrong."})
+        else:
+            raise serializers.ValidationError({"response": "Error", "error_message": "Check your password. It might "
+                                                                                     "be wrong."})
 
 
 # helper method to validate the email of the user
