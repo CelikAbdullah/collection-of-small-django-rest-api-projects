@@ -17,7 +17,6 @@ def custom_exception_handler(exc, context):
 
     if response is not None:
         customized_response = {}
-        customized_response_helper = {}
         # When we deal with a validation error, then customize the
         # result of the exception a little bit. The standard validation
         # error puts the values of the keys into a list. I do not want that.
@@ -27,9 +26,8 @@ def custom_exception_handler(exc, context):
         # into this {"email": "This field is required."}
         if isinstance(exc, DRFValidationError):
             for key, value in response.data.items():
-                customized_response_helper[key] = value[0]
+                customized_response[key] = value[0]
 
-            customized_response["error"] = customized_response_helper
             response.data = customized_response
 
     return response
