@@ -64,6 +64,18 @@ class LoginSerializer(serializers.Serializer):
                                                                                      "be wrong."})
 
 
+# Serializer for changing password
+class ChangePasswordSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    newPassword = serializers.CharField()
+
+    def validate(self, data):
+        if validate_email(data["email"]) is None:
+            raise serializers.ValidationError({"response": "Your email does not exist."})
+
+        return data
+
+
 # helper method to validate the email of the user
 def validate_email(email):
     try:

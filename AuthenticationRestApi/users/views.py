@@ -1,5 +1,5 @@
 from users.models import User
-from users.serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from users.serializers import UserSerializer, RegisterSerializer, LoginSerializer, ChangePasswordSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -74,24 +74,16 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
-class ForgotPasswordView(APIView):
+class ChangePasswordView(APIView):
     """
-    The class-based view for resetting the password.
+    The class-based view for changing the password
     """
     def post(self, request, format=None):
-        response = {}
-        email = request.data.get('email')
-        password = request.data.get('newPassword')
-
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            response['response'] = 'Your email does not exist.'
-            return Response(response)
-
-        if user:
-            user.set_password(password)
+        # pass incoming data to corresponding serializer
+        serializer = ChangePasswordSerializer(data=request.data)
+        # deserialize and validate incoming data
+        if serializer.is_valid(raise_exception=True):
+            user = User.objects.get(email=serializer.validated_data["email"])
+            user.set_password(serializer.validated_data["newPassword"])
             user.save()
-
-            response['response'] = 'Your new password is saved successfully.'
-            return Response(response)
+            return Response({"response": "Your new password is saved successfully"})
