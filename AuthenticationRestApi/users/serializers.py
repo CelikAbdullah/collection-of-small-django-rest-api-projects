@@ -33,10 +33,10 @@ class RegisterSerializer(serializers.Serializer):
         username = data['username']
 
         if validate_email(email) is not None:
-            raise serializers.ValidationError({"response": "Error", "error_message": "That email is already in use."})
+            raise serializers.ValidationError({"detail": "That email is already in use."})
         if validate_username(username) is not None:
             raise serializers.ValidationError(
-                {"response": "Error", "error_message": "That username is already in use."})
+                {"detail": "That username is already in use."})
 
         return data
 
@@ -57,10 +57,10 @@ class LoginSerializer(serializers.Serializer):
             return user
 
         if validate_username(data["username"]) is None:
-            raise serializers.ValidationError({"response": "Error", "error_message": "Check your username. It might "
+            raise serializers.ValidationError({"detail": "Check your username. It might "
                                                                                      "be wrong."})
         else:
-            raise serializers.ValidationError({"response": "Error", "error_message": "Check your password. It might "
+            raise serializers.ValidationError({"detail": "Check your password. It might "
                                                                                      "be wrong."})
 
 
@@ -71,7 +71,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     def validate(self, data):
         if validate_email(data["email"]) is None:
-            raise serializers.ValidationError({"response": "Your email does not exist."})
+            raise serializers.ValidationError({"detail": "Your email does not exist."})
 
         return data
 
